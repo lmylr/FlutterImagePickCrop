@@ -135,10 +135,8 @@ public class FlutterImagePickCropPlugin implements MethodCallHandler, PluginRegi
     }
 
     private void startCropImageActivity(Uri imageUri) {
-        CropImage.activity(imageUri).setGuidelines(CropImageView.Guidelines.ON)
+        CropImage.activity(imageUri).setGuidelines(CropImageView.Guidelines.ON).setAspectRatio(1, 1)
                 .start(activity);
-
-
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -153,13 +151,13 @@ public class FlutterImagePickCropPlugin implements MethodCallHandler, PluginRegi
                 finishWithSuccess(resultUri.getPath());
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
-                finishWithError("Failed Permission",error.getMessage());
+                finishWithError("Failed Permission", error.getMessage());
             }
 
             return true;
         }
 
-    if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == RESULT_OK) {
             Uri imageUri = CropImage.getPickImageResultUri(context, data);
             if (CropImage.isReadExternalStoragePermissionsRequired(context, imageUri)) {
                 mCropImageUri = imageUri;
@@ -195,7 +193,7 @@ public class FlutterImagePickCropPlugin implements MethodCallHandler, PluginRegi
                 // required permissions granted, start crop image activity
                 startCropImageActivity(mCropImageUri);
             } else {
-                finishWithError("Failed Permission","Cancelling, required permissions are not granted");
+                finishWithError("Failed Permission", "Cancelling, required permissions are not granted");
                 //Toast.makeText(activity, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
             }
 
